@@ -77,3 +77,52 @@ Modelo: ${this.modelo}.`)
 
 const carro1 = new Carro("BYD", "Dolphin Mini")
 carro1.mostrarCarro()
+
+// Exercício 5 - Encapsulamento (conta) Enunciado: Crie uma classe conta onde: - o saldo seja um atributo privado; - exista um método depositar (valor); - exista um método mostrarSaldo();
+
+class Conta{
+    #saldo
+    constructor(){
+        this.#saldo = 0
+    }
+
+    depositar(valor){
+        if(valor < 0 ){
+            console.log(`Valor inválido`)
+        }else{
+            this.#saldo += valor
+        }
+    }
+    mostrarSaldo(){
+        console.log(`Saldo: R$${this.#saldo.toFixed(2)}`)
+    }
+}
+
+const conta1 = new Conta()
+conta1.depositar(-10)
+conta1.depositar(70)
+conta1.mostrarSaldo();
+
+// Exercício 6 - Encapsulamento (aluno) Enunciado: - a nota seja um atributo privado; - exista um método definirNota(nota); - exista um método mostrarNota()
+
+class Aluno{
+    #nota
+    constructor(){
+        this.#nota = 0
+    }
+    definirNota(nota){
+        if(nota < 0 || nota > 10){
+            console.log(`Nota Inválida!`)
+        }else{
+            this.#nota = nota
+        }
+    }
+    mostrarNota(){
+        console.log(`Nota: ${this.#nota}`)
+    }
+}
+
+const aluno1 = new Aluno()
+aluno1.definirNota(-1)
+aluno1.definirNota(9.8)
+aluno1.mostrarNota()
