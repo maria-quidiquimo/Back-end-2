@@ -13,9 +13,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/maria-quidiquimo/Back-end-2/issues"
   },
-  "homepage": "https://github.com/maria-quidiquimo/Back-end-2#readme"
+  "homepage": "https://github.com/maria-quidiquimo/Back-end-2#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
