@@ -166,4 +166,65 @@ app.post ('/filmes', async (req,res) =>{// '/filmes' é a rota / o try catch ser
     }
 })
 
+app.put('/filmes/:id', async (req,res) =>{
+    try {
+        const {id} = req.params
+        const {titulo, genero, duracao, classificacao, data_lancamento} = req.body
+
+        if(!id || isNaN(id)){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'ID filme inválido'
+            })
+        }
+
+        const filmeExiste = await queryAsync('SELECT * FROM filme WHERE id = ?', [id])
+        if(filmeExiste.length === 0){
+            return res.status(404).json({// 404 é quando não localiza a informação
+                sucesso: false,
+                mensagem: 'Filme não encontrado.'
+            })
+        }
+
+        const filmeAtualizado = {}
+        
+        if(titulo !== undefined) filmeAtualizado.titulo = titulo.trim() // if mais simples não precisa ficar abrindo chaves ou fechando
+        if(genero !== undefined) filmeAtualizado.genero = genero.trim()
+        if(duracao !== undefined){
+            if(typeof duracao !== 'number' || duracao <= 0){
+                return res.status(400).json({
+                    sucesso: false,
+                    mensagem: 'Duração deve ser um número positivo.'
+                }) // return da duracao
+            } // if interno typeof duracao
+            filmeAtualizado.duracao = duracao
+        } // duracao undefined
+        if(classificacao !== undefined) filmeAtualizado.classificacao = classificacao
+        if(data_lancamento !== undefined) filmeAtualizado.data_lancamento = data_lancamento
+
+        if(Object.keys(filmeAtualizado).length === 0){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Tem nenhum campo para atualizar.'
+            })
+        }
+
+        await queryAsync('UPDATE filme SET ? WHERE id = ?', [filmeAtualizado, id])
+        res.json({
+            sucesso: true,
+            mensagem: 'Filme atualizado com sucesso.'
+        })
+
+    } catch (erro) { // todos os códigos catch vai ter a estrutura do código igual, só muda a mensagem
+        console.error('Erro ao atualizar o filme.', erro)
+        res.status(500).json({// erro 500 é o erro do servidor, o cliente não vai conseguir fazer nada 
+            sucesso: false,
+            mensagem: 'Erro ao atualizar o filme.',
+            erro: erro.message
+        })
+    }
+})
+
+
+
 module.exports = app
