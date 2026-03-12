@@ -121,4 +121,49 @@ app.get ('/filmes/:id', async (req,res) =>{ //coloca o async pra informar q é a
 })
 
 
+app.post ('/filmes', async (req,res) =>{// '/filmes' é a rota / o try catch serve para não travar o sistema do cliente
+    try {// acessar o banco de dados e ver se o conteudo é valido
+        const {titulo, genero, duracao, classificacao, data_lancamento} = req.body
+
+        if(!titulo || !genero || !duracao){// ! significa negação
+            return res.status(400).json({//status 400 é quando ele tras um erro que o servidor não consegue concluir algo que foi solicitado 
+                sucesso: false,
+                mensagem: 'Título, gênero e duração são obrigatórios.'
+            })    
+        }
+
+        if(typeof duracao != 'number' || duracao <= 0){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Duração deve ser um número positivo'
+            })
+        }
+
+        const novoFilme = {
+            titulo: titulo.trim(),//trim() tira todos os espaços
+            genero: genero.trim(),
+            duracao,
+            classificacao: classificacao || null,// quando não da um comando para a classificacao coloca o null
+            data_lancamento: data_lancamento || null
+        }
+
+        const resultado = await queryAsync('INSERT INTO filme SET ?', [novoFilme])// usamos await para a tentativa de salvar no banco / SET serve para salvar todas as infromações do banco de dados (é mais simples)
+
+        res.status(201).json({// status 201 serve para algo novo que deu certo
+            sucesso: true,
+            mensagem: 'Filme cadastrado com sucesso.',
+            id: resultado.insertId
+        })
+
+    } catch (erro) { // vai tratar o erro de conexão com o servidor e banco de dados
+        console.error('Erro ao salvar o filme.', erro)
+        res.status(500).json({// erro 500 é o erro do servidor, o cliente não vai conseguir fazer nada 
+            sucesso: false,
+            mensagem: 'Erro ao salvar o filme.',
+            erro: erro.message
+        })
+
+    }
+})
+
 module.exports = app
