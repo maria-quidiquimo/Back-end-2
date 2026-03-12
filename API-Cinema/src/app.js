@@ -81,4 +81,44 @@ app.get('/filmes/:id', (req,res) => {
     })
 })
 
+
+//NOVO
+app.get ('/filmes/:id', async (req,res) =>{ //coloca o async pra informar q é assíncrona, e q vai ter q esperar uma resposta alguma hr
+//try é a estrututra de q vai dar certo (teste de validação) e catch coloca a mensagem de erro
+    const {id} = req.params //recupera o id - PRECISA FAZER ISSO ANTES DE CODAR
+    try {
+
+        if(!id || isNaN(id)){
+            return res.status(400).json({
+                sucesso:false,
+                mensagem: 'ID de filme inválido'
+            })
+        }
+ 
+       if(filme.length === 0 ){  //esse if direciona para o catch
+        return res.status(404).json({
+            sucesso: false,
+            mensagem: 'Filme não encontrado'
+        })
+       }
+        const filme = await queryAsync('SELECT * FROM filme WHERE id = ?', [id])
+        res.json({
+            sucesso: true,
+            id: id,
+            dados:filme,
+        })
+    }
+       
+    catch (erro) { //trata erro de servidor, e não de busca, o erro de busca foi tratado lá na validação
+        console.error ('Erro ao procuar filme', erro)
+        res.status(500).json({
+            sucesso:false,
+            mensagem: 'Erro ao procurar filme',
+            erro: erro.message
+        })
+    }
+
+})
+
+
 module.exports = app
