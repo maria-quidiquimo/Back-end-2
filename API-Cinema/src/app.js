@@ -225,6 +225,43 @@ app.put('/filmes/:id', async (req,res) =>{
     }
 })
 
+app.delete('/filmes/:id', async (req,res) =>{
+    try {
+        const {id} = req.params
 
+        // código copiado do put (o inicio do put)
+        if(!id || isNaN(id)){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'ID filme inválido'
+            })
+        }
+
+        const filmeExiste = await queryAsync('SELECT * FROM filme WHERE id = ?', [id])
+
+        if(filmeExiste.length === 0){
+            return res.status(404).json({// 404 é quando não localiza a informação
+                sucesso: false,
+                mensagem: 'Filme não encontrado.'
+            })
+        }
+
+        await queryAsync('DELETE FROM filme WHERE id = ?', [id])
+
+        res.status(200).json({
+            sucesso: true,
+            mensagem: 'Filme apagado com sucesso.'
+        })
+
+
+    } catch (erro) {// o catch não é diferente do put, somente a mensagem que é diferente
+        console.error('Erro ao atualizar o filme.', erro)
+        res.status(500).json({// erro 500 é o erro do servidor, o cliente não vai conseguir fazer nada 
+            sucesso: false,
+            mensagem: 'Erro ao atualizar o filme.',
+            erro: erro.message
+        })
+    }
+})
 
 module.exports = app
