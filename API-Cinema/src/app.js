@@ -377,7 +377,7 @@ app.put('/salas/:id', async (req,res) =>{
 
         const salaExiste = await queryAsync('SELECT * FROM sala WHERE id = ?', [id])
         if(salaExiste.length === 0){
-            return res.status(404).json({// 404 é quando não localiza a informação
+            return res.status(404).json({
                 sucesso: false,
                 mensagem: 'Sala não encontrada.'
             })
@@ -387,7 +387,7 @@ app.put('/salas/:id', async (req,res) =>{
         
         if(nome !== undefined) salaAtualizada.nome = nome.trim()
         if(capacidade !== undefined){
-            if(typeof capacidade !== 'number' || duracao <= 0){
+            if(typeof capacidade !== 'number' || capacidade <= 0){
                 return res.status(400).json({
                     sucesso: false,
                     mensagem: 'Capacidade deve ser um número positivo.'
@@ -424,7 +424,6 @@ app.delete('/salas/:id', async (req,res) =>{
     try {
         const {id} = req.params
 
-        // código copiado do put (o inicio do put)
         if(!id || isNaN(id)){
             return res.status(400).json({
                 sucesso: false,
@@ -435,7 +434,7 @@ app.delete('/salas/:id', async (req,res) =>{
         const salaExiste = await queryAsync('SELECT * FROM sala WHERE id = ?', [id])
 
         if(salaExiste.length === 0){
-            return res.status(404).json({// 404 é quando não localiza a informação
+            return res.status(404).json({
                 sucesso: false,
                 mensagem: 'Sala não encontrado.'
             })
