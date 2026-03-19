@@ -407,7 +407,7 @@ app.put('/salas/:id', async (req,res) =>{
         await queryAsync('UPDATE sala SET ? WHERE id = ?', [salaAtualizada, id])
         res.json({
             sucesso: true,
-            mensagem: 'Sala atualizado com sucesso.'
+            mensagem: 'Sala atualizada com sucesso.'
         })
 
     } catch (erro) {
