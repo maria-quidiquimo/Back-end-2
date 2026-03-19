@@ -265,7 +265,7 @@ app.delete('/filmes/:id', async (req,res) =>{
 
 app.get('/salas', async (req, res) => {
     try{
-        const salas = await queryAsync('Select * FROM sala')
+        const salas = await queryAsync('Select * FROM sala ')
         res.json({
             sucesso: true,
             dados: salas,
@@ -293,6 +293,7 @@ app.get ('/salas/:id', async (req,res) =>{
                 mensagem: 'ID da sala inválido'
             })
         }
+        const sala = await queryAsync('SELECT * FROM sala WHERE id = ?', [id])
  
        if(sala.length === 0 ){
         return res.status(404).json({
@@ -300,7 +301,7 @@ app.get ('/salas/:id', async (req,res) =>{
             mensagem: 'Sala não encontrada'
         })
        }
-        const sala = await queryAsync('SELECT * FROM sala WHERE id = ?', [id])
+        
         res.json({
             sucesso: true,
             id: id,
