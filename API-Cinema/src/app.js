@@ -54,6 +54,9 @@ app.get('/', (req,res) => {
 //     })
 // })
 
+
+// FILMES - GET, POST, PUT E DELETE
+
 app.get('/filmes', async (req, res) => {
     try{
         const filmes = await queryAsync('Select * FROM filme')
@@ -263,6 +266,8 @@ app.delete('/filmes/:id', async (req,res) =>{
     }
 })
 
+// SALAS - GET, POST, PUT E DELETE
+
 app.get('/salas', async (req, res) => {
     try{
         const salas = await queryAsync('Select * FROM sala ')
@@ -457,5 +462,10 @@ app.delete('/salas/:id', async (req,res) =>{
         })
     }
 })
+
+
+// SESSÃO - GET, POST, PUT E DELETE
+
+
 
 module.exports = app
