@@ -466,6 +466,65 @@ app.delete('/salas/:id', async (req,res) =>{
 
 // SESSÃO - GET, POST, PUT E DELETE
 
+app.get('/sessoes', async (req, res) => {
+    try{
+        const sessoes = await queryAsync('Select * FROM sessao ')
+        res.json({
+            sucesso: true,
+            dados: sessoes,
+            total: sessoes.length
+        })
+    }
+    catch(erro){
+        console.error ('Erro ao listar sessoes', erro)
+        res.status(500).json({
+            sucesso: false,
+            mensagem: 'Erro ao listar sessoes',
+            erro: erro.message
+        })
+    }
+})
+
+
+app.get ('/sessoes/:id', async (req,res) =>{
+    const {id} = req.params 
+    try {
+
+        if(!id || isNaN(id)){
+            return res.status(400).json({
+                sucesso:false,
+                mensagem: 'ID da sessão inválido'
+            })
+        }
+        const sessao = await queryAsync('SELECT * FROM sessao WHERE id = ?', [id])
+ 
+       if(sessao.length === 0 ){
+        return res.status(404).json({
+            sucesso: false,
+            mensagem: 'Sessão não encontrada'
+        })
+       }
+        
+        res.json({
+            sucesso: true,
+            id: id,
+            dados: sessao,
+        })
+    }
+       
+    catch (erro) { 
+        console.error ('Erro ao procuar a sessão', erro)
+        res.status(500).json({
+            sucesso:false,
+            mensagem: 'Erro ao procurar a sessão',
+            erro: erro.message
+        })
+    }
+
+})
+
+// O POST VAI SER DIFERENTE NA SESSÃO POIS TEM CHAVES ESTRANGEIRAS
+
 
 
 module.exports = app
