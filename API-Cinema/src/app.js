@@ -525,6 +525,45 @@ app.get ('/sessoes/:id', async (req,res) =>{
 
 // O POST VAI SER DIFERENTE NA SESSÃO POIS TEM CHAVES ESTRANGEIRAS
 
-
+app.post('/sessoes', async (req,res) => {
+    try {
+        const {filme_id, sala_id, data_hora, preco} = req.body;
+        if(!filme_id || !sala_id || !data_hora || !preco){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Filme, sala, data e hora e o preço precisam ser um número!'
+            })
+        }
+        const filme = await queryAsync('SELECT id FROM filme WHERE id = ?', [filme_id]);
+        if(filme.length === 0){
+            return res.status(404).json({
+                sucesso: false,
+                mensagem: 'Filme não encontrado'
+            })
+        }
+        const sala = await queryAsync('SELECT id FROM sala WHERE id = ?', [sala_id]);
+        if(filme.length === 0){
+            return res.status(404).json({
+                sucesso: false,
+                mensagem: 'Sala não encontrada'
+            })
+        }
+        const novaSessao = {filme_id, sala_id, data_hora, preco};
+        const resultado = await queryAsync ('INSERT INTO sessao SET ?', [novaSessao]);
+        res.status(201).json({
+            sucesso: true,
+            mensagem: 'Sessão criada com sucesso',
+            id: resultado.insertId
+        });
+    }
+    catch (erro){
+        console.error('Erro ao criar sessao', erro);
+        res.status(500).json({
+            sucesso: false, 
+            mensagem: 'erro ao criar sessao', 
+            erro: erro
+        })
+    }
+})
 
 module.exports = app
