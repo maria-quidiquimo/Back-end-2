@@ -120,7 +120,7 @@ app.post('/produtos', async (req, res) =>{
     }
 })
 
-app.put('/produto/:id', async (req,res) =>{
+app.put('/produtos/:id', async (req,res) =>{
     try {
         const {id} = req.params
         const {nome, descricao, preco, disponivel} = req.body
@@ -143,7 +143,7 @@ app.put('/produto/:id', async (req,res) =>{
         const produtoAtualizado = {}
 
         if (nome !== undefined) produtoAtualizado.nome = nome.trim()
-        if(descricao !== undefined) produtoAtualizado.descricao.trim()
+        if(descricao !== undefined) produtoAtualizado.descricao = descricao.trim()
         if(preco !== undefined){
             if(typeof preco !== 'number' || preco <= 0){
                 return res.status(400).json({
@@ -160,6 +160,7 @@ app.put('/produto/:id', async (req,res) =>{
                     mensagem:'Você precisa definir corretamente a disponibilidade!'
                 })
             }
+            produtoAtualizado.disponivel = disponivel
         }
 
         if(Object.keys (produtoAtualizado).length === 0){
@@ -185,7 +186,7 @@ app.put('/produto/:id', async (req,res) =>{
     }
 })
 
-app.delete('/produto/:id', async (req,res) =>{
+app.delete('/produtos/:id', async (req,res) =>{
     try {
         const {id} = req.params
         const {nome, descricao, preco, disponivel} = req.body
