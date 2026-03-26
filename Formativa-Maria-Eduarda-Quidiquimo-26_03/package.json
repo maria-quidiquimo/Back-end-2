@@ -1,8 +1,8 @@
 {
-  "name": "back-end-2",
+  "name": "formativa-maria-eduarda-quidiquimo-26_03",
   "version": "1.0.0",
   "description": "",
-  "main": "revisao.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
