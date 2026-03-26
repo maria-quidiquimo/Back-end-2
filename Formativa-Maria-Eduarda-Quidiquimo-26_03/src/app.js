@@ -133,7 +133,7 @@ app.put('/produto/:id', async (req,res) =>{
         }
 
         const produtoExiste = await queryAsync('SELECT * FROM produto WHERE id = ?', [id])
-        if(filmeExiste.length === 0){
+        if(produtoExiste.length === 0){
             return res.status(404).json({
                 sucesso: false,
                 mensagem: ' Produto não encontrado'
@@ -185,6 +185,41 @@ app.put('/produto/:id', async (req,res) =>{
     }
 })
 
+app.delete('/produto/:id', async (req,res) =>{
+    try {
+        const {id} = req.params
+        const {nome, descricao, preco, disponivel} = req.body
 
+        if(!id || isNaN(id)){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'ID produto inválido'
+            })
+        }
+
+        const produtoExiste = await queryAsync('SELECT * FROM produto WHERE id = ?', [id])
+        if(produtoExiste.length === 0){
+            return res.status(404).json({
+                sucesso: false,
+                mensagem: ' Produto não encontrado'
+            })
+        }
+
+        await queryAsync('DELETE FROM produto WHERE id = ?', [id])
+
+        res.status(200).json({
+            sucesso: true,
+            mensagem: 'Produto apagado com sucesso'
+        })
+
+    }catch{
+        console.error('Erro ao atualizar produto', erro)
+        res.status(500).json({
+            sucesso: false,
+            mensagem: 'Erro ao atualizar produto',
+            erro: erro.message
+        })
+    }
+})
 
 module.exports = app
