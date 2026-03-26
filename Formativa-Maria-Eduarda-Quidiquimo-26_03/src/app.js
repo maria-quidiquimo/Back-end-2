@@ -73,6 +73,53 @@ app.get('/produtos/:id', async (req, res) =>{
     }
 })
 
+app.post('/produtos', async (req, res) =>{
+    try {
+        const {nome, descricao, preco, disponivel} = req.body
+        if(!nome || !descricao || !preco || !disponivel){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Nome, descrição, preço e disponibilidade são obrogatórios'
+            })
+        }
+
+        if(typeof preco != 'number' || preco <=0){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Preço deve ser um número positivo'
+            })
+        }
+        if(typeof disponivel != 'boolean'){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Você deve colocar se está disponível ou não'
+            })
+        }
+
+        const novoProduto = {
+            nome: nome.trim(),
+            descricao: descricao.trim(),
+            preco,
+            disponivel
+        }
+        const resultado = await queryAsync ('INSERT INTO produto SET ?', [novoProduto])
+
+        res.status(201).json({
+            sucesso: true,
+            mensagem: 'Produto cadastrado com sucesso',
+            id: resultado.insertId
+        })
+
+    } catch (error) {
+        console.error('Erro ao salvar o Produto.', erro)
+        res.status(500).json({
+            sucesso: false,
+            mensagem: 'Erro ao salvar o Produto.',
+            erro: erro.message
+        })
+    }
+})
+
 
 
 module.exports = app
