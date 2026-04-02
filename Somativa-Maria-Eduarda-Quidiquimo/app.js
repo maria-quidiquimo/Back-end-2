@@ -85,6 +85,10 @@ app.get('/produtos/id', async (req, res) => {
 
 
 // 3) CADASTRAR PRODUTO
+app.post('/produto/:id', async (req, res) =>{
+
+})
+
 
 // 4) ATUALIZAR PRODUTO
 app.put('/produtos/:id', async (req, res) => {
@@ -145,6 +149,7 @@ app.put('/produtos/:id', async (req, res) => {
         })
     }
 })
+
 
 
 // 5) DELETAR PRODUTO
