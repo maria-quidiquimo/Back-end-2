@@ -49,7 +49,7 @@ app.get('/produtos', async (req, res) => {
 
 
 // 2) BUSCAR PRODUTO POR ID
-app.get('/produtos/id', async (req, res) => {
+app.get('/produtos/:id', async (req, res) => {
     try {
         const { id } = req.params
 
@@ -60,7 +60,7 @@ app.get('/produtos/id', async (req, res) => {
             })
         }
 
-        const produto = await queryAsync("SELECT * FROM produto WHERE id = id", [id])
+        const produto = await queryAsync("SELECT * FROM produto WHERE id = ?", [id])
 
         if (produto.length === 0) {
             return res.status(404).json({
@@ -71,7 +71,7 @@ app.get('/produtos/id', async (req, res) => {
 
         res.json({
             sucesso: true,
-            dados: produto[0]
+            dados: produto
         })
 
     } catch (erro) {
@@ -86,15 +86,61 @@ app.get('/produtos/id', async (req, res) => {
 
 // 3) CADASTRAR PRODUTO
 app.post('/produto/:id', async (req, res) =>{
+    try {
+        const {nome, descricao, preco, disponivel, categoria} = req.body
+        if(!nome || !descricao || !preco || !disponivel || !categoria){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Nome, descrição, preço e disponibilidade e categoria são obrigatórios'
+            })
+        }
 
+        if(typeof preco != 'number' || preco <=0){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'Preço precisa ser um número positivo'
+            })
+        }
+
+        if(typeof disponivel != 'boolean'){
+            return res.status(400).json({
+                sucesso:false,
+                mensagem: 'Você precisa colocar se está disponível ou não'
+            })
+        }
+
+        const novoProduto = {
+            nome: nome.trim(),
+            descricao: descricao.trim(),
+            preco,
+            disponivel,
+            categoria: categoria.trim()
+        }
+
+        const resultado = await queryAsync('INSERT INTO produto SET ?', [novoProduto])
+
+        res.status(201).json({
+            sucesso: true,
+            mensagem: 'Produto cadastrado com sucesso',
+            id: resultado.insertId
+        })
+
+    } catch (error){
+        console.error('Erro ao salvar o Produto', erro)
+        res.status(500).json({
+            sucesso: false,
+            mensagem: 'Erro ao salvar o Produto',
+            erro: erro.message
+        })
+    }
 })
 
 
 // 4) ATUALIZAR PRODUTO
 app.put('/produtos/:id', async (req, res) => {
     try {
-        const id = req.params
-        const dados  = req.body
+        const {id} = req.params
+        const {nome, descricao, preco, disponivel, categoria} = req.body
 
         if (!id || isNaN(id)) {
             return res.status(400).json({
@@ -134,7 +180,7 @@ app.put('/produtos/:id', async (req, res) => {
             })
         }
 
-        await queryAsync("UPDATE produto SET ? WHERE id = ?", [dados, id])
+        await queryAsync("UPDATE produto SET ? WHERE id = ?", [atualizado, id])
 
         res.json({
             sucesso: true,
@@ -156,6 +202,7 @@ app.put('/produtos/:id', async (req, res) => {
 app.delete('/produtos/:id', async (req, res) => {
     try {
         const { id } = req.params
+        const {nome, descricao, preco, disponivel, categoria} = req.body
 
         if (!id || isNaN(id)) {
             return res.status(400).json({
