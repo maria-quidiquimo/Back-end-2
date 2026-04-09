@@ -85,13 +85,14 @@ app.get('/produtos/:id', async (req, res) => {
 
 
 // 3) CADASTRAR PRODUTO
-app.post('/produto/:id', async (req, res) =>{
+app.post('/produto', async (req, res) =>{
     try {
-        const {nome, descricao, preco, disponivel, categoria} = req.body
-        if(!nome || !descricao || !preco || !disponivel || !categoria){
+        const {nome, descricao, preco, categoria, disponivel} = req.body
+
+        if(!nome || !descricao || !preco){
             return res.status(400).json({
                 sucesso: false,
-                mensagem: 'Nome, descrição, preço e disponibilidade e categoria são obrigatórios'
+                mensagem: 'Nome, descrição, preço são obrigatórios'
             })
         }
 
@@ -102,27 +103,20 @@ app.post('/produto/:id', async (req, res) =>{
             })
         }
 
-        if(typeof disponivel != 'boolean'){
-            return res.status(400).json({
-                sucesso:false,
-                mensagem: 'Você precisa colocar se está disponível ou não'
-            })
-        }
-
         const novoProduto = {
             nome: nome.trim(),
             descricao: descricao.trim(),
             preco,
-            disponivel,
-            categoria: categoria.trim()
+            categoria: categoria,
+            disponivel: disponivel
         }
 
-        const resultado = await queryAsync('INSERT INTO produto SET ?', [novoProduto])
+        // const resultado = 
+        await queryAsync('INSERT INTO produto SET ?', [novoProduto])
 
-        res.status(201).json({
+        return res.status(201).json({
             sucesso: true,
             mensagem: 'Produto cadastrado com sucesso',
-            id: resultado.insertId
         })
 
     } catch (error){
