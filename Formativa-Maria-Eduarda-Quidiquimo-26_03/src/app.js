@@ -96,18 +96,18 @@ app.post('/produtos', async (req, res) =>{
             })
         }
 
-        const novoProduto = {
+        const cadastrarNovoProduto = {
             nome: nome.trim(),
             descricao: descricao.trim(),
             preco,
             disponivel
         }
-        const resultado = await queryAsync ('INSERT INTO produto SET ?', [novoProduto])
+        const resultadoDoCadastro = await queryAsync ('INSERT INTO produto SET ?', [cadastrarNovoProduto])
 
         res.status(201).json({
             sucesso: true,
             mensagem: 'Produto cadastrado com sucesso',
-            id: resultado.insertId
+            id: resultadoDoCadastro.insertId
         })
 
     } catch (error) {
@@ -132,18 +132,18 @@ app.put('/produtos/:id', async (req,res) =>{
             })
         }
 
-        const produtoExiste = await queryAsync('SELECT * FROM produto WHERE id = ?', [id])
-        if(produtoExiste.length === 0){
+        const verSeProdutoExiste = await queryAsync('SELECT * FROM produto WHERE id = ?', [id])
+        if(verSeProdutoExiste.length === 0){
             return res.status(404).json({
                 sucesso: false,
                 mensagem: ' Produto não encontrado'
             })
         }
 
-        const produtoAtualizado = {}
+        const produtoFoiAtualizado = {}
 
-        if (nome !== undefined) produtoAtualizado.nome = nome.trim()
-        if(descricao !== undefined) produtoAtualizado.descricao = descricao.trim()
+        if (nome !== undefined) produtoFoiAtualizado.nome = nome.trim()
+        if(descricao !== undefined) produtoFoiAtualizado.descricao = descricao.trim()
         if(preco !== undefined){
             if(typeof preco !== 'number' || preco <= 0){
                 return res.status(400).json({
@@ -151,7 +151,7 @@ app.put('/produtos/:id', async (req,res) =>{
                     mensagem: 'Preço deve ser um número positivo'
                 })
             }
-            produtoAtualizado.preco = preco
+            produtoFoiAtualizado.preco = preco
         }
         if(disponivel !== undefined){
             if(typeof disponivel !== 'boolean'){
@@ -160,17 +160,17 @@ app.put('/produtos/:id', async (req,res) =>{
                     mensagem:'Você precisa definir corretamente a disponibilidade!'
                 })
             }
-            produtoAtualizado.disponivel = disponivel
+            produtoFoiAtualizado.disponivel = disponivel
         }
 
-        if(Object.keys (produtoAtualizado).length === 0){
+        if(Object.keys (produtoFoiAtualizado).length === 0){
             return res.status(400).json({
                 sucesso: false,
                 mensagem:'Tem nenhum campo para atualizar.'
             })
         }
 
-        await queryAsync ('UPDATE produto SET ? WHERE id = ?', [produtoAtualizado, id])
+        await queryAsync ('UPDATE produto SET ? WHERE id = ?', [produtoFoiAtualizado, id])
         res.json({
             sucesso: true,
             mensagem: 'Produto atualizado com sucesso.'
@@ -198,8 +198,8 @@ app.delete('/produtos/:id', async (req,res) =>{
             })
         }
 
-        const produtoExiste = await queryAsync('SELECT * FROM produto WHERE id = ?', [id])
-        if(produtoExiste.length === 0){
+        const verSeProdutoExiste = await queryAsync('SELECT * FROM produto WHERE id = ?', [id])
+        if(verSeProdutoExiste.length === 0){
             return res.status(404).json({
                 sucesso: false,
                 mensagem: ' Produto não encontrado'
