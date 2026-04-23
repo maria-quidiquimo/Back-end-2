@@ -3,13 +3,13 @@
 app.get('/usuarios', async (req, res) => {
     try{
     const usuarios = await queryAsync("SELECT * FROM usuario")
-    res.json({
+    res.status(200).json({
         sucesso: true,
         dados: usuarios,
         total: usuarios.length
     })
     } catch (erro){
-        console.error('Erro ap listar usuários', erro)
+        console.error('Erro ao listar usuários', erro)
         res.status(500).json({
             sucesso: false,
             mensagem: "Erro ao listar usuários",
@@ -19,13 +19,13 @@ app.get('/usuarios', async (req, res) => {
 })
 
 app.get('/usuarios/:id', async (req, res) => {
-    const {id} = req.params
-    try{  
+    try{
+        const {id} = req.params  
         const usuario = await queryAsync("SELECT * FROM usuario WHERE id = ?", [req.params.id])
-        res.json({
+        res.status(200).json({
             sucesso: true,
             id: id,
-            dados: usuario
+            dados: usuario[0]
         })
         
         if (usuario.length === 0) {
@@ -43,7 +43,7 @@ app.get('/usuarios/:id', async (req, res) => {
         } 
     } catch(erro){
         console.error ("Erro ao procurar Usuário", erro)
-        res.json({
+        res.status(500).json({
             sucesso: false,
             mensagem: "Erro ao procurar Usuário",
             erro: erro.message
@@ -55,7 +55,7 @@ app.get('/usuarios/:id', async (req, res) => {
 
 app.post('/pedidos', async (req, res) => {
     try{
-    const { cliente, valor } = req.body
+    const { cliente, valor } = req.body // o front end que manda isso pra gente
 
     if (!cliente || !valor) {
         return res.status(400).json({
@@ -176,3 +176,12 @@ app.delete('/salas/:id', async (req, res) => {
     }
     
 })
+
+// const validarDadosAtualizados = (dados, res) =>{
+//   if(Object.keys(dados).length === 0){
+//       return res.status(400).json({
+//          sucesso: false,
+//         mensagem: "nenhum dado enviado"
+//      })
+//   }
+// }
