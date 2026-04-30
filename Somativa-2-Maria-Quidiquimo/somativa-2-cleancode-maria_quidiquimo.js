@@ -24,7 +24,8 @@ app.put('reserva/:id', async (req, res) => {
         }
 
         const reservaFoiAtualizada = {}
-
+        if (sala !== undefined) reservaFoiAtualizada.sala = sala.trim()
+        
         if (data_reserva <= "Date") {
             if(typeof data_reserva != "Date" || data_reserva <= "Date"){
                 res.status(400).json({
@@ -34,10 +35,6 @@ app.put('reserva/:id', async (req, res) => {
             } reservaFoiAtualizada.data_reserva = data_reserva
         }
 
-
-        if (sala !== undefined) reservaFoiAtualizada.sala = sala.trim()
-
-        
         await queryAsync("UPDATE reservas SET ? WHERE id = ?", [reservaFoiAtualizada, id])    
             res.status(200).json({
                 sucesso: true,
@@ -45,12 +42,11 @@ app.put('reserva/:id', async (req, res) => {
             })
             
         } catch (erro) {
-            if(reservaExiste.length === 0){
-                res.status(404).json({
-                    sucesso: false,
-                    mensagem: "Reserva não foi feita. Tente novamente mais tarde."
-                })
-            }
+            console.error("Erro ao fazer sua reserva", erro)
+            res.status(500).json({
+                sucesso: false,
+                mensagem: erro.message
+            })
         }
 })
 
