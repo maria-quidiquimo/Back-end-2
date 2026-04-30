@@ -1,3 +1,4 @@
+const app = require('../app')
 const pool = require('../config/database')
 
 class ProdutoRepository{
@@ -26,3 +27,5 @@ class ProdutoRepository{
         return true
     }
 }
+
+module.exports = new ProdutoRepository()
