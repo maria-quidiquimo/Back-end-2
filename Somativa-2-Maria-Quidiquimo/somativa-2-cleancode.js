@@ -5,7 +5,7 @@
 app.put('reserva/:id', async (req, res) => {
     try {
         const {id} = req.params
-        const {sala, dia_reserva} = req.body
+        const {sala, data_reserva} = req.body
         
         const reservaExiste = await queryAsync("SELECT * FROM reservas WHERE id = ?", [id])
         
@@ -25,13 +25,13 @@ app.put('reserva/:id', async (req, res) => {
 
         const reservaFoiAtualizada = {}
 
-        if (dia_reserva <= "Date") {
-            if(typeof dia_reserva != "Date" || dia_reserva <= "Date"){
+        if (data_reserva <= "Date") {
+            if(typeof data_reserva != "Date" || data_reserva <= "Date"){
                 res.status(400).json({
                     sucesso: false,
                     mensagem: "A data da reserva seve ser depois de hoje, e deve ser uma data válida."
                 })
-            } reservaFoiAtualizada.dia_reserva = dia_reserva
+            } reservaFoiAtualizada.data_reserva = data_reserva
         }
 
 
