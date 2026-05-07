@@ -147,3 +147,5 @@ class ProdutoService{
         }
     }
 }
+
+module.exports = new ProdutoService()
