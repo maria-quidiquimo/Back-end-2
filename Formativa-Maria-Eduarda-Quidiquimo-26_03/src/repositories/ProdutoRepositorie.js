@@ -18,8 +18,23 @@ class ProdutoRepository{
     }
 
     async atualizarProduto(id, dadosDoProduto){
-        const produtoAtualizado = await pool.query('UPDATE produto SET ? WHERE id = ?', [dadosDoProduto, id])
-        return produtoAtualizado
+        const camposProduto = []
+        const dadoProduto = []
+
+        for(const [key, value] of Object.entries(dadosDoProduto)){
+            camposProduto.push(`${key} = ?`)
+            dadoProduto.push(value)
+        }
+
+        if(camposProduto.length === 0) return null
+
+        dadoProduto.push(id)
+
+        const query = `UPDATE produto SET ${camposProduto.join(',')} WHERE id = ?`//.join(',') -> separação por vírgula ,
+
+        const resultado = await pool.query(query, dadoProduto)
+
+        return resultado.affectedRows
     }
 
     async apagarProduto(id){
