@@ -1,4 +1,4 @@
-const ProdutoService = require('../services/ProdutoService');
+const ProdutoService = require('../Services/produtoService');
 
 class ProdutoController {
     async listar(req, res) {
