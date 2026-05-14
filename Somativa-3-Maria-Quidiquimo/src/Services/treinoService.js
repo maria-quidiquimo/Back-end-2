@@ -1,4 +1,4 @@
-const TreinoRepository = require('../repositories/TreinoRepository');
+const TreinoRepository = require('../Repositories/TreinoRepository');
 
 class TreinoService {
     async listarTreinos() {

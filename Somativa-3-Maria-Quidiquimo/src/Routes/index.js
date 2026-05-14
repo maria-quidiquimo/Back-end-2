@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const treinoRoutes = require('./treinoRoutes');
+const treinoRoutes = require('./TreinoRoutes');
 
 router.use('/api/treinos', treinoRoutes);
 

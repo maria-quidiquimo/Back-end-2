@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const TreinoController = require('../controllers/TreinoController');
+const TreinoController = require('../Controller/TreinoController');
 
 router.get('/', TreinoController.listar);
 router.get('/:id', TreinoController.buscarPorId);

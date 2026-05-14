@@ -1,4 +1,4 @@
-const pool = require('../config/database');
+const pool = require('../Config/database');
 
 class TreinoRepository {
     async findAll() {

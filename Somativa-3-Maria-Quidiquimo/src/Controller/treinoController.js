@@ -1,4 +1,4 @@
-const TreinoService = require('../services/TreinoService');
+const TreinoService = require('../Services/TreinoService');
 
 class TreinoController {
     async listar(req, res) {
