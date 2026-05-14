@@ -60,7 +60,14 @@ class TreinoService {
         return { sucesso: true, mensagem: "Treino atualizado com sucesso" };
     }
 
-    // TODO: Como vamos validar a exclusão de um treino sem a função deletarTreino? Copie ela dos trechos faltantes!
+    async deletarTreino(id) {
+        if (!id || isNaN(id)) throw { status: 400, mensagem: "ID inválido" };
+        const existe = await TreinoRepository.findById(id);
+        if (!existe) throw { status: 404, mensagem: "Treino não encontrado" };
+
+        await TreinoRepository.delete(id);
+        return { sucesso: true, mensagem: "Treino apagado com sucesso" };
+    }
 }
 
 module.exports = new TreinoService();

@@ -20,7 +20,20 @@ class TreinoRepository {
         return result.insertId;
     }
 
-    // TODO: A query de atualizar os treinos no banco de dados sumiu! Busque no arquivo de trechos.
+    async update(id, treinoData) {
+        const fields = [];
+        const values = [];
+        for (const [key, value] of Object.entries(treinoData)) {
+            fields.push(`${key} = ?`);
+            values.push(value);
+        }
+        if (fields.length === 0) return null;
+
+        values.push(id);
+        const query = `UPDATE treino SET ${fields.join(', ')} WHERE id = ?`;
+        const [result] = await pool.query(query, values);
+        return result.affectedRows;
+    }
 
     async delete(id) {
         const [result] = await pool.query('DELETE FROM treino WHERE id = ?', [id]);
