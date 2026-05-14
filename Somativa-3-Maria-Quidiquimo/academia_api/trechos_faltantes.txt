@@ -1,0 +1,44 @@
+--- TRECHO A ---
+
+    async update(id, treinoData) {
+        const fields = [];
+        const values = [];
+        for (const [key, value] of Object.entries(treinoData)) {
+            fields.push(`${key} = ?`);
+            values.push(value);
+        }
+        if (fields.length === 0) return null;
+
+        values.push(id);
+        const query = `UPDATE treino SET ${fields.join(', ')} WHERE id = ?`;
+        const [result] = await pool.query(query, values);
+        return result.affectedRows;
+    }
+
+
+--- TRECHO B ---
+
+    async cadastrar(req, res) {
+        try {
+            const resultado = await TreinoService.cadastrarTreino(req.body);
+            res.status(201).json(resultado);
+        } catch (erro) {
+            res.status(erro.status || 500).json({ sucesso: false, mensagem: erro.mensagem || "Erro interno" });
+        }
+    }
+
+
+--- TRECHO C ---
+router.get('/:id', TreinoController.buscarPorId);
+
+--- TRECHO D ---
+
+    async deletarTreino(id) {
+        if (!id || isNaN(id)) throw { status: 400, mensagem: "ID inválido" };
+        const existe = await TreinoRepository.findById(id);
+        if (!existe) throw { status: 404, mensagem: "Treino não encontrado" };
+
+        await TreinoRepository.delete(id);
+        return { sucesso: true, mensagem: "Treino apagado com sucesso" };
+    }
+
