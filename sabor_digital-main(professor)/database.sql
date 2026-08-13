@@ -1,8 +1,8 @@
 -- Script de criação do banco de dados e tabelas - Cantina Bella Vita
 
 -- 1. Criação do Banco de Dados
-CREATE DATABASE IF NOT EXISTS sabordigital;
-USE sabordigital;
+CREATE DATABASE IF NOT EXISTS sabordigital_rep_celso;
+USE sabordigital_rep_celso;
 
 -- 2. Tabela de Produto (Prato/Bebida)
 CREATE TABLE IF NOT EXISTS produto (
