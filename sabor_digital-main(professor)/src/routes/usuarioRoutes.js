@@ -11,4 +11,6 @@ router.post('/', verificarToken, verificarAdmin, upload.single('imagem'), usuari
 router.put('/:id', verificarToken, verificarAdmin, usuarioController.atualizar)
 router.delete('/:id', verificarToken,verificarAdmin, usuarioController.deletar)
 
+router.post('/login', usuarioController.login);
+
 module.exports = router;
