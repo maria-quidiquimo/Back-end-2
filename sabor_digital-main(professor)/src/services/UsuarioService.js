@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'chave_super_secreta_sabor_digital_123';
 
 class UsuarioService{
-    async ListarUsuario(){
+    async ListarUsuarios(){
         const usuarios = await UsuarioRepository.findAll()
         return usuarios
     }

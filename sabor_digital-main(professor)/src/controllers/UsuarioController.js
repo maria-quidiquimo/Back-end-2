@@ -4,7 +4,7 @@ class UsuarioController{
 
     async listar(req, res){
         try {
-            const resultado = await UsuarioService.listarUsuario();
+            const resultado = await UsuarioService.listarUsuarios();
             res.json(resultado);
         } catch (erro) {
             res.status(erro.status || 500).json({
