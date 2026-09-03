@@ -6,6 +6,10 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'chave_super_secreta_sabor_digital_123';
 
 class UsuarioService{
+    async ListarUsuario(){
+        const usuarios = await UsuarioRepository.findAll()
+        return usuarios
+    }
     async RegistrarUsuario({nome, email, senha, papel}){
         const usuarioExiste = await UsuarioRepository.findByEmail(email);
         if (usuarioExiste){
