@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const TarefaController = require('../controllers/TarefaController');
 const { authMiddleware } = require('../middlewares/authMiddleware');
+
 router.use(authMiddleware);
 router.get('/', TarefaController.listar);
 router.post('/', TarefaController.criar);
