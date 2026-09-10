@@ -1,4 +1,6 @@
 const UsuarioService = require('../services/UsuarioService');
+const { authMiddleware, authAdminMiddleware } = require('../middlewares/authMiddleware');
+
 class UsuarioController {
     async registrar(req, res) {
         try {

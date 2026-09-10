@@ -8,29 +8,30 @@
 // =========================================================================
 
 
-function authMiddleware(req, res, next) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        return res.status(401).json({ error: 'Token não fornecido' });
-    }
-    const parts = authHeader.split(' ');
-    if (parts.length !== 2) {
-        return res.status(401).json({ error: 'Token com formato inválido' });
-    }
-    const [scheme, token] = parts;
-    if (!/^Bearer$/i.test(scheme)) {
-        return res.status(401).json({ error: 'Token mal formatado' });
-    }
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Token inválido ou expirado' });
-        }
-        req.usuarioId = decoded.id;
-        req.usuarioEmail = decoded.email;
-        req.usuarioPapel = decoded.papel;
-        return next();
-    });
-}
+// coloquei no middleware
+// function authMiddleware(req, res, next) {
+//     const authHeader = req.headers.authorization;
+//     if (!authHeader) {
+//         return res.status(401).json({ error: 'Token não fornecido' });
+//     }
+//     const parts = authHeader.split(' ');
+//     if (parts.length !== 2) {
+//         return res.status(401).json({ error: 'Token com formato inválido' });
+//     }
+//     const [scheme, token] = parts;
+//     if (!/^Bearer$/i.test(scheme)) {
+//         return res.status(401).json({ error: 'Token mal formatado' });
+//     }
+//     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+//         if (err) {
+//             return res.status(401).json({ error: 'Token inválido ou expirado' });
+//         }
+//         req.usuarioId = decoded.id;
+//         req.usuarioEmail = decoded.email;
+//         req.usuarioPapel = decoded.papel;
+//         return next();
+//     });
+// }
 
 
 //--------------------------------------------------------------------------------------
@@ -39,32 +40,33 @@ const { authMiddleware, authAdminMiddleware } = require('../middlewares/authMidd
 
 //--------------------------------------------------------------------------------------
 
-async login(email, senha) {
-    if (!email || !senha) {
-        throw new Error('E-mail e senha são obrigatórios');
-    }
-    const usuario = await UsuarioRepository.buscarPorEmail(email);
-    if (!usuario) {
-        throw new Error('Credenciais inválidas');
-    }
-    const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
-    if (!senhaCorreta) {
-        throw new Error('Credenciais inválidas');
-    }
-    const token = jwt.sign(
-        { id: usuario.id, email: usuario.email, papel: usuario.papel },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
-    return {
-        token,
-        usuario: {
-            id: usuario.id,
-            nome: usuario.nome,
-            email: usuario.email
-        }
-    };
-}
+// adicionei no service de usuario o de baixo
+// async login(email, senha) {
+//     if (!email || !senha) {
+//         throw new Error('E-mail e senha são obrigatórios');
+//     }
+//     const usuario = await UsuarioRepository.buscarPorEmail(email);
+//     if (!usuario) {
+//         throw new Error('Credenciais inválidas');
+//     }
+//     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+//     if (!senhaCorreta) {
+//         throw new Error('Credenciais inválidas');
+//     }
+//     const token = jwt.sign(
+//         { id: usuario.id, email: usuario.email, papel: usuario.papel },
+//         process.env.JWT_SECRET,
+//         { expiresIn: process.env.JWT_EXPIRES_IN }
+//     );
+//     return {
+//         token,
+//         usuario: {
+//             id: usuario.id,
+//             nome: usuario.nome,
+//             email: usuario.email
+//         }
+//     };
+// }
 
 //--------------------------------------------------------------------------------------
 

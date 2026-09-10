@@ -3,7 +3,33 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 class UsuarioService {
     
-    
+    async login(email, senha) {
+    if (!email || !senha) {
+        throw new Error('E-mail e senha são obrigatórios');
+    }
+    const usuario = await UsuarioRepository.buscarPorEmail(email);
+    if (!usuario) {
+        throw new Error('Credenciais inválidas');
+    }
+    const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+    if (!senhaCorreta) {
+        throw new Error('Credenciais inválidas');
+    }
+    const token = jwt.sign(
+        { id: usuario.id, email: usuario.email, papel: usuario.papel },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+    return {
+        token,
+        usuario: {
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email
+        }
+    };
+}
+
     async listar(adminId) {
         return await UsuarioRepository.listar(adminId);
     }
