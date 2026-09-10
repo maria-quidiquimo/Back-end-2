@@ -36,7 +36,8 @@
 
 //--------------------------------------------------------------------------------------
 
-const { authMiddleware, authAdminMiddleware } = require('../middlewares/authMiddleware');
+// coloquei na controller de usuario
+// const { authMiddleware, authAdminMiddleware } = require('../middlewares/authMiddleware');
 
 //--------------------------------------------------------------------------------------
 
@@ -70,30 +71,32 @@ const { authMiddleware, authAdminMiddleware } = require('../middlewares/authMidd
 
 //--------------------------------------------------------------------------------------
 
-function authAdminMiddleware(req, res, next) {
-    if (req.usuarioPapel !== 'admin') {
-        return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem executar esta ação.' });
-    }
-    next();
-}
+// coloquei no middleware tambem
+// function authAdminMiddleware(req, res, next) {
+//     if (req.usuarioPapel !== 'admin') {
+//         return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem executar esta ação.' });
+//     }
+//     next();
+// }
 
 
 //--------------------------------------------------------------------------------------
 
-async registrar(dadosUsuario) {
-    const { nome, email, senha } = dadosUsuario;
-    if (!nome || !email || !senha) {
-        throw new Error('Nome, e-mail e senha são obrigatórios');
-    }
-    const usuarioExistente = await UsuarioRepository.buscarPorEmail(email);
-    if (usuarioExistente) {
-        throw new Error('E-mail já cadastrado');
-    }
-    const salt = await bcrypt.genSalt(10);
-    const senhaHash = await bcrypt.hash(senha, salt);
-    const id = await UsuarioRepository.criar({ nome, email, senha: senhaHash });
-    return { id, nome, email };
-}
+// coloquei no service de usuario
+// async registrar(dadosUsuario) {
+//     const { nome, email, senha } = dadosUsuario;
+//     if (!nome || !email || !senha) {
+//         throw new Error('Nome, e-mail e senha são obrigatórios');
+//     }
+//     const usuarioExistente = await UsuarioRepository.buscarPorEmail(email);
+//     if (usuarioExistente) {
+//         throw new Error('E-mail já cadastrado');
+//     }
+//     const salt = await bcrypt.genSalt(10);
+//     const senhaHash = await bcrypt.hash(senha, salt);
+//     const id = await UsuarioRepository.criar({ nome, email, senha: senhaHash });
+//     return { id, nome, email };
+// }
 
 
 // =========================================================================

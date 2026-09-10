@@ -30,9 +30,25 @@ class UsuarioService {
     };
 }
 
+    async registrar(dadosUsuario) {
+    const { nome, email, senha } = dadosUsuario;
+    if (!nome || !email || !senha) {
+        throw new Error('Nome, e-mail e senha são obrigatórios');
+    }
+    const usuarioExistente = await UsuarioRepository.buscarPorEmail(email);
+    if (usuarioExistente) {
+        throw new Error('E-mail já cadastrado');
+    }
+    const salt = await bcrypt.genSalt(10);
+    const senhaHash = await bcrypt.hash(senha, salt);
+    const id = await UsuarioRepository.criar({ nome, email, senha: senhaHash });
+    return { id, nome, email };
+}
+
     async listar(adminId) {
         return await UsuarioRepository.listar(adminId);
     }
+    
     async deletar(id) {
         const usuarioExistente = await UsuarioRepository.buscarPorId(id);
         if (!usuarioExistente) {

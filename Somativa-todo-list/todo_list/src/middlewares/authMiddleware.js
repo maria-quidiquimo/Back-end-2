@@ -24,4 +24,11 @@ function authMiddleware(req, res, next) {
     });
 }
 
+function authAdminMiddleware(req, res, next) {
+    if (req.usuarioPapel !== 'admin') {
+        return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem executar esta ação.' });
+    }
+    next();
+}
+
 module.exports = { authMiddleware, authAdminMiddleware };
