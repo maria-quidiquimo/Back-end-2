@@ -19,9 +19,9 @@ class JogoController {
                 in: 'body',
                 description: 'Dados do novo jogo',
                 schema: {
-                    $nome: "The Witcher 3",
-                    $desenvolvedora: "CD Projekt Red",
-                    $preco: 120.5,
+                    $nome: "MineCraft",
+                    $desenvolvedora: "Não lembro",
+                    $preco: 9.99,
                     anoLancamento: 2015 
                 }
             }
@@ -34,6 +34,17 @@ class JogoController {
     }
 
     atualizar(req, res) {
+        /*  #swagger.parameters['body'] = {
+                in: 'body',
+                description: 'Dados do novo jogo',
+                schema: {
+                    nome: "MineCraft",
+                    desenvolvedora: "Não Lembro",
+                    preco: 9.99,
+                    anoLancamento: 2015 
+                }
+            }
+        */
         const resultado = JogoService.atualizarJogo(req.params.id, req.body);
         if(!resultado.sucesso) {
             return res.status(404).json(resultado);
