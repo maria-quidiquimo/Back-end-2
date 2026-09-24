@@ -19,7 +19,10 @@ class JogoController {
                 in: 'body',
                 description: 'Dados do novo jogo',
                 schema: {
-                    // ALUNO: PREENCHA O SCHEMA AQUI BASEADO NOS REQUISITOS DO ENUNCIADO!
+                    $nome: "The Witcher 3",
+                    $desenvolvedora: "CD Projekt Red",
+                    $preco: 120.5,
+                    anoLancamento: 2015 
                 }
             }
         */

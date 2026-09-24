@@ -4,7 +4,7 @@ const app = express();
 const routes = require('./routes');
 
 const swaggerUi = require('swagger-ui-express')
-const swaggerFiles = require('swagger_output.json')
+const swaggerFiles = require('./swagger_output.json')
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFiles))
 
