@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ProdutoController = require('../controllers/ProdutoController');
 const upload = require('../config/multer');
-const { verificarToken, verificarAdmin } = require('../middlewares/authMiddleware')
+const { verificarToken, verificarAdmin } = require('../middlewares/authMiddlewares')
 
 router.get('/', ProdutoController.listar);
 router.get('/:id', ProdutoController.buscarPorId);
