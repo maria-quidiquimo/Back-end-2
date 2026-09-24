@@ -15,7 +15,7 @@ class LivroController {
     }
 
     cadastrar(req, res) {
-        swagger.parameters['body'] = {
+        /*  #swagger.parameters['body'] = {
                 in: 'body',
                 description: 'Dados do novo livro',
                 schema: {
@@ -25,6 +25,7 @@ class LivroController {
                     paginas: 432
                 }
             }
+        */
         const resultado = LivroService.cadastrarLivro(req.body);
         if(!resultado.sucesso) {
             return res.status(400).json(resultado);
@@ -33,7 +34,7 @@ class LivroController {
     }
 
     atualizar(req, res) {
-        swagger.parameters['body'] = {
+        /*  #swagger.parameters['body'] = {
                 in: 'body',
                 description: 'Dados para atualizar o livro (envie apenas os que deseja alterar)',
                 schema: {
@@ -43,6 +44,7 @@ class LivroController {
                     paginas: 432
                 }
             }
+        */
         const resultado = LivroService.atualizarLivro(req.params.id, req.body);
         if(!resultado.sucesso) {
             return res.status(404).json(resultado);
